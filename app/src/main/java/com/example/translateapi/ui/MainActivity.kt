@@ -3,9 +3,12 @@ package com.example.translateapi.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.lifecycleScope
+import com.example.translateapi.R
 import com.example.translateapi.databinding.ActivityMainBinding
 import com.example.translateapi.model.Languages
 import com.example.translateapi.model.ResultTranslated
@@ -13,7 +16,6 @@ import com.example.translateapi.repositry.LanguageRepository
 import com.example.translateapi.repositry.TranslateRepository
 import com.example.translateapi.utils.Constant
 import com.example.translateapi.utils.Status
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onCompletion
@@ -22,21 +24,33 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var queryMap: MutableMap<String, String>? = null
+    private var queryMap = mutableMapOf<String, String>()
+    private val arrayLangName: ArrayList<String> = arrayListOf()
+    private val arrayLangCode: ArrayList<String> = arrayListOf()
+    private var selectLangSource: String? = null
+    private var selectLangTarget: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.sourceText.doOnTextChanged { text, start, before, count ->
-            queryMap?.set(Constant.Translate.QUERY, text.toString())
-            queryMap?.set(Constant.Translate.SOURCE, "en")
-            queryMap?.set(Constant.Translate.TARGET, "ar")
-            queryMap?.let { makeTranslateRequest(it) }
-            initSpinner()
-        }
+        setup()
+    }
+
+    private fun setup() {
+        initInput()
         initSpinner()
+    }
+
+    private fun initInput() {
+        binding.sourceText.doOnTextChanged { text, start, before, count ->
+            queryMap[Constant.Translate.QUERY] = text.toString()
+            queryMap[Constant.Translate.SOURCE] = selectLangSource.toString()
+            queryMap[Constant.Translate.TARGET] = selectLangTarget.toString()
+            makeTranslateRequest(queryMap = queryMap)
+            Log.i("Karrar_j_d", selectLangSource.toString())
+        }
     }
 
     private fun initSpinner() {
@@ -77,19 +91,41 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setSpinner(data: Languages) {
-        Log.i("Karrar_j_d", data.toString())
+        data.forEach {
+            arrayLangName.add(it.name.toString())
+            arrayLangCode.add(it.code.toString())
+        }
+        val arrayAdapter = ArrayAdapter(this, R.layout.item_dropdown, arrayLangName)
+        binding.dropdownLangSource.apply {
+            setAdapter(arrayAdapter)
+            onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                    selectLangSource = arrayLangCode[position]
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                }
+            }
+        }
+        binding.dropdownLangTarget.apply {
+            setAdapter(arrayAdapter)
+            onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                    selectLangTarget = arrayLangCode[position]
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+
+                }
+            }
+        }
     }
 
     private fun makeTranslateRequest(queryMap: Map<String, String>) {
-        lifecycleScope.async {
-            TranslateRepository.getTranslateQuery( queryMap = queryMap).onCompletion {
 
-            }.catch {
-
-            }.collect{
-                Log.i("Karrar_j_d", it.toString())
-                getResultTranslate(it)
-            }
+       lifecycleScope.launch {
+            TranslateRepository.getTranslateData( queryMap = queryMap).collect(::getResultTranslate)
         }
     }
 
@@ -110,7 +146,6 @@ class MainActivity : AppCompatActivity() {
 //                ).show()
             }
             is Status.Success -> {
-                Log.i("Karrar_j_d", response.data.translatedText.toString())
                 setData(response.data)
             }
         }

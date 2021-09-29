@@ -1,6 +1,5 @@
 package com.example.translateapi.network
 
-import android.util.Log
 import com.example.translateapi.model.Languages
 import com.example.translateapi.model.ResultTranslated
 import com.example.translateapi.utils.Constant
@@ -17,7 +16,7 @@ object Client {
     val gson = Gson()
 
 
-    private fun BaseUrl(pathSegment: String, queryMap: Map<String, String>?) =
+    fun BaseUrl(pathSegment: String, queryMap: Map<String, String>?) =
         HttpUrl.Builder().scheme(Constant.Url.SCHEME).
         host(Constant.Url.HOST).addPathSegment(pathSegment).apply {
         if (pathSegment == Constant.TRANSLATE) {
@@ -27,36 +26,20 @@ object Client {
         }
     }.toString()
 
-    fun initRequestLanguage(): Status<Languages> {
-        val request = Request.Builder().url(BaseUrl(Constant.LANGUAGE, null)).build()
-        val response = client.newCall(request).execute()
 
-        return if (response.isSuccessful) {
-            val parserResponse = gson.fromJson(
-                response.body?.string(),
-                Languages::class.java
-            )
-            Status.Success(parserResponse)
-        } else {
-            Status.Error(response.message)
-        }
-    }
-
-    fun initRequestTranslate(queryMap: Map<String, String>): Status<ResultTranslated> {
+    inline fun <reified T> initRequest(typeRequest: String, queryMap: Map<String, String>?): Status<T>{
         val postBody = FormBody.Builder().build()
-//            .add(Constant.Translate.QUERY, q)
-//            .add(Constant.Translate.SOURCE, source)
-//            .add(Constant.Translate.TARGET, target)
-//            .build()
-        Log.i("Karrar_j_d", BaseUrl(Constant.TRANSLATE, queryMap))
-        val url = "https://translate.argosopentech.com/translate?q=book&source=en&target=ar"
-        val request = Request.Builder().url(url).post(postBody).build()
+        val request = Request.Builder().url(BaseUrl(typeRequest, queryMap)).apply {
+            if (typeRequest == Constant.TRANSLATE) {
+                post(postBody)
+            }
+        }.build()
         val response = client.newCall(request).execute()
 
         return if (response.isSuccessful) {
             val parserResponse = gson.fromJson(
                 response.body?.string(),
-                ResultTranslated::class.java
+                T::class.java
             )
             Status.Success(parserResponse)
         } else {

@@ -6,19 +6,82 @@
     android:layout_height="match_parent"
     tools:context=".ui.MainActivity">
 
-    <EditText
-        android:id="@+id/source_text"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
+    <include
+        android:id="@+id/include"
+        layout="@layout/backgroundui"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/target_text"
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_swap"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/dropdown_lang_source"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/source_text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:hint="@string/click_to_enter_text"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/target_text"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:elevation="1dp"
+            android:padding="16dp"
+            android:textSize="24sp"
+            android:gravity="center_vertical"
+            app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/source_text" />
+
+    </LinearLayout>
+
+
+    <Spinner
+        android:id="@+id/dropdown_lang_source"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@+id/source_text" />
+        android:layout_margin="24dp"
+        android:hint="@string/source_language"
+        app:layout_constraintBottom_toBottomOf="@+id/include"
+        app:layout_constraintEnd_toStartOf="@+id/dropdown_lang_target"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/include"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Spinner
+        android:id="@+id/dropdown_lang_target"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="24dp"
+        android:hint="@string/target_language"
+        app:layout_constraintBottom_toBottomOf="@+id/include"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/dropdown_lang_source" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/karrar/AndroidStudioProjects/TranslateApi/app/src/main/res/drawable/shap.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/karrar/AndroidStudioProjects/TranslateApi/app/src/main/res/drawable/shap2.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/karrar/AndroidStudioProjects/TranslateApi/app/src/main/res/drawable/shap3.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/karrar/AndroidStudioProjects/TranslateApi/app/src/main/res/drawable/shap4.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/karrar/AndroidStudioProjects/TranslateApi/app/src/main/res/drawable/shape1.xml" value="0.22552083333333334" />
         <entry key="..\:/Users/karrar/AndroidStudioProjects/TranslateApi/app/src/main/res/layout/activity_main.xml" value="0.1953125" />
+        <entry key="..\:/Users/karrar/AndroidStudioProjects/TranslateApi/app/src/main/res/layout/backgroundui.xml" value="0.209375" />
+        <entry key="..\:/Users/karrar/AndroidStudioProjects/TranslateApi/app/src/main/res/layout/item_dropdown.xml" value="0.209375" />
+        <entry key="..\:/Users/karrar/AndroidStudioProjects/TranslateApi/app/src/main/res/layout/test.xml" value="0.209375" />
+        <entry key="..\:/Users/karrar/AndroidStudioProjects/TranslateApi/app/src/main/res/layout/test2.xml" value="0.15" />
       </map>
     </option>
   </component>
@@ -12,5 +21,12 @@
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.15" />
+      </ProjectState>
+    </option>
   </component>
 </project>
