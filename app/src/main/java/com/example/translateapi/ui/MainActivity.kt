@@ -2,7 +2,6 @@ package com.example.translateapi.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -29,6 +28,8 @@ class MainActivity : AppCompatActivity() {
     private val arrayLangCode: ArrayList<String> = arrayListOf()
     private var selectLangSource: String? = null
     private var selectLangTarget: String? = null
+    private var positionSourceLang: Int? = null
+    private var positionTargetLang: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,16 +42,36 @@ class MainActivity : AppCompatActivity() {
     private fun setup() {
         initInput()
         initSpinner()
+        initSwapLang()
+    }
+
+    private fun initSwapLang() {
+        binding.swapLang.setOnClickListener {
+            switchLang()
+        }
+    }
+
+    private fun switchLang() {
+        selectLangSource = selectLangTarget.also { selectLangTarget = selectLangSource }
+        binding.apply {
+            targetText.text = sourceText.text.toString().also { sourceText.setText(targetText.text) }
+            positionTargetLang?.let { dropdownLangSource.setSelection(it) }
+            positionSourceLang?.let { dropdownLangTarget.setSelection(it) }
+        }
     }
 
     private fun initInput() {
         binding.sourceText.doOnTextChanged { text, start, before, count ->
-            queryMap[Constant.Translate.QUERY] = text.toString()
-            queryMap[Constant.Translate.SOURCE] = selectLangSource.toString()
-            queryMap[Constant.Translate.TARGET] = selectLangTarget.toString()
+            queryMap = initMutableMap(text.toString(), selectLangSource, selectLangTarget)
             makeTranslateRequest(queryMap = queryMap)
-            Log.i("Karrar_j_d", selectLangSource.toString())
         }
+    }
+
+    private fun initMutableMap(query: String, selectLangSource: String?, selectLangTarget: String?): MutableMap<String, String> {
+        queryMap[Constant.Translate.QUERY] = query
+        queryMap[Constant.Translate.SOURCE] = selectLangSource.toString()
+        queryMap[Constant.Translate.TARGET] = selectLangTarget.toString()
+        return queryMap
     }
 
     private fun initSpinner() {
@@ -101,6 +122,9 @@ class MainActivity : AppCompatActivity() {
             onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                     selectLangSource = arrayLangCode[position]
+                    positionSourceLang = position
+                    queryMap = initMutableMap(binding.sourceText.text.toString(), selectLangSource, selectLangTarget)
+                    makeTranslateRequest(queryMap = queryMap)
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -113,6 +137,9 @@ class MainActivity : AppCompatActivity() {
             onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
                 override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                     selectLangTarget = arrayLangCode[position]
+                    positionTargetLang = position
+                    queryMap = initMutableMap(binding.sourceText.text.toString(), selectLangSource, selectLangTarget)
+                    makeTranslateRequest(queryMap = queryMap)
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {

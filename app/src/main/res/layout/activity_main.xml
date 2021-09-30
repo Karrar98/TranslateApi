@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/white"
     tools:context=".ui.MainActivity">
 
     <include
@@ -17,9 +18,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@drawable/ic_swap"
+        android:id="@+id/swap_lang"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_sync"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/dropdown_lang_source"
+        app:layout_constraintBottom_toTopOf="@+id/input_layout_source"
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
@@ -38,7 +40,11 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:hint="@string/click_to_enter_text"
-            android:padding="16dp"
+            android:padding="24dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:inputType="text"
+            android:background="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -49,8 +55,10 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:elevation="1dp"
-            android:padding="16dp"
+            android:padding="24dp"
             android:textSize="24sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
             android:gravity="center_vertical"
             app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
             app:layout_constraintEnd_toEndOf="parent"
@@ -59,29 +67,40 @@
 
     </LinearLayout>
 
-
-    <Spinner
-        android:id="@+id/dropdown_lang_source"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_source"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="24dp"
         android:hint="@string/source_language"
         app:layout_constraintBottom_toBottomOf="@+id/include"
-        app:layout_constraintEnd_toStartOf="@+id/dropdown_lang_target"
+        app:layout_constraintEnd_toStartOf="@+id/input_layout_target"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@+id/include"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <Spinner
-        android:id="@+id/dropdown_lang_target"
+        <Spinner
+            android:id="@+id/dropdown_lang_source"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/input_layout_target"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="24dp"
+        android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:hint="@string/target_language"
         app:layout_constraintBottom_toBottomOf="@+id/include"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/dropdown_lang_source" />
+        app:layout_constraintStart_toEndOf="@+id/input_layout_source">
 
+        <Spinner
+            android:id="@+id/dropdown_lang_target"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
